@@ -1,5 +1,6 @@
 ﻿namespace Banking.Domain
 {
+    public enum BankAccountType { Standard, Gold };
     public class BankAccount
     {
         private decimal _balance;

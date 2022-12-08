@@ -1,26 +1,21 @@
-﻿using Banking.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Banking.UnitTests.TestDoubles;
 
-namespace Banking.UnitTests
+namespace Banking.UnitTests;
+
+public class WorkingWithMultipleAccounts
 {
-    internal class WorkingWithMultipleAccounts
+    [Fact(Skip ="Just a classroom demonstration")]
+    public void InstancesOfOurAccountAreIsolated()
     {
-        [Fact]
+        //var bobsAccount = new BankAccount(new DummyBonusCalculator());
+        //var suesAccount = new BankAccount(new DummyBonusCalculator());
 
-        public void InstanceOfOurAccountsAreIsolated()
-        {
-            var bobsAccount = new BankAccount();
-            var suesAccount = new BankAccount();
+        //bobsAccount.Deposit(1000M);
+        //suesAccount.Withdraw(suesAccount.GetBalance());
 
-            bobsAccount.Deposit(100M);
-            suesAccount.Withdraw(suesAccount.GetBalance());
+        //Assert.Equal(6000, bobsAccount.GetBalance());
+        //Assert.Equal(0, suesAccount.GetBalance());
 
-            Assert.Equal(6000, bobsAccount.GetBalance());
-            Assert.Equal(0, suesAccount.GetBalance());
-        }
     }
 }

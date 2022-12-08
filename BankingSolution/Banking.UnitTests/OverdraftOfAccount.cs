@@ -1,29 +1,58 @@
-﻿using Banking.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace Banking.UnitTests
+
+namespace Banking.UnitTests;
+
+public class OverdraftOfAccount
 {
-    public class OverdraftOfAccount
+
+    private readonly BankAccount _account;
+
+    public OverdraftOfAccount()
     {
-        [Fact]
-        public void CanTakeAllTheMoney()
-        {
-            var account = new BankAccount();
-            account.Withdraw(account.GetBalance());
+        _account = new BankAccount(new Mock<ICalculateBonuses>().Object,
+            new Mock<INotifyAccountReps>().Object);
+    }
 
-            Assert.Equal(0, account.GetBalance());
+    [Fact] // Safety Net - an "Invariant"
+    public void CanTakeAllTheMoney()
+    {
+       
+
+        _account.Withdraw(_account.GetBalance());
+
+        Assert.Equal(0, _account.GetBalance());
+    }
+
+    [Fact]
+    public void OverdraftDoesNotDecreaseTheBalance()
+    {
+       
+        var openingBalance = _account.GetBalance();
+        var amountToWithDraw = openingBalance + .01M;
+
+        // Exceptional Behavior
+        try
+        {
+            _account.Withdraw(amountToWithDraw); //  "No-op"
+        }
+        catch (OverdraftException)
+        {
+
+            // Ignore it.
         }
 
-        [Fact]
-        public void OverDraftDoesNotDecreaseTheBalance()
+        Assert.Equal(openingBalance, _account.GetBalance());
+    }
+
+    [Fact]
+    public void OverdraftThrowsAnOverdraftException()
+    {
+     
+
+        Assert.Throws<OverdraftException>(() =>
         {
-            var account = new BankAccount();
-            var openingBalance = account.GetBalance();
-            var amountToWithdraw = openingBalance + .01M;
-        }
+            _account.Withdraw(_account.GetBalance() + .51M);
+        });
     }
 }
